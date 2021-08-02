@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,6 +12,8 @@
 		674B2BFB26B55616001979EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 674B2BFA26B55616001979EB /* Assets.xcassets */; };
 		674B2BFE26B55616001979EB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 674B2BFD26B55616001979EB /* Preview Assets.xcassets */; };
 		674B2C0126B55617001979EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 674B2BFF26B55617001979EB /* Main.storyboard */; };
+		67BBAC9A26B6E8EC002CA16D /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 67BBAC9926B6E8EC002CA16D /* SwiftSoup */; };
+		67BBAC9C26B6F054002CA16D /* example_tripinfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 67BBAC9B26B6F054002CA16D /* example_tripinfo.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +25,7 @@
 		674B2C0026B55617001979EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		674B2C0226B55617001979EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		674B2C0326B55617001979EB /* OebbTripInfo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OebbTripInfo.entitlements; sourceTree = "<group>"; };
+		67BBAC9B26B6F054002CA16D /* example_tripinfo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = example_tripinfo.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67BBAC9A26B6E8EC002CA16D /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,6 +66,7 @@
 				674B2C0226B55617001979EB /* Info.plist */,
 				674B2C0326B55617001979EB /* OebbTripInfo.entitlements */,
 				674B2BFC26B55616001979EB /* Preview Content */,
+				67BBAC9B26B6F054002CA16D /* example_tripinfo.json */,
 			);
 			path = OebbTripInfo;
 			sourceTree = "<group>";
@@ -90,6 +95,9 @@
 			dependencies = (
 			);
 			name = OebbTripInfo;
+			packageProductDependencies = (
+				67BBAC9926B6E8EC002CA16D /* SwiftSoup */,
+			);
 			productName = OebbTripInfo;
 			productReference = 674B2BF326B55616001979EB /* OebbTripInfo.app */;
 			productType = "com.apple.product-type.application";
@@ -117,6 +125,9 @@
 				Base,
 			);
 			mainGroup = 674B2BEA26B55615001979EB;
+			packageReferences = (
+				67BBAC9826B6E8EC002CA16D /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+			);
 			productRefGroup = 674B2BF426B55616001979EB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -134,6 +145,7 @@
 				674B2C0126B55617001979EB /* Main.storyboard in Resources */,
 				674B2BFE26B55616001979EB /* Preview Assets.xcassets in Resources */,
 				674B2BFB26B55616001979EB /* Assets.xcassets in Resources */,
+				67BBAC9C26B6F054002CA16D /* example_tripinfo.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +356,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		67BBAC9826B6E8EC002CA16D /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		67BBAC9926B6E8EC002CA16D /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 67BBAC9826B6E8EC002CA16D /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 674B2BEB26B55615001979EB /* Project object */;
 }

@@ -8,6 +8,7 @@
 import Cocoa
 import SwiftUI
 import CoreWLAN
+import SwiftSoup
 
 
 @main
@@ -15,6 +16,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     var window: NSWindow!
     var statusItem: NSStatusItem?
+    
+    var trainName: String!
     
     
     
@@ -30,6 +33,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        loadTripInfo() { data in }
+        let semaphore = DispatchSemaphore(value: 0)
+        loadTrainInfo() { data in
+               if let data = data {
+                self.trainName = data
+                semaphore.signal()
+               }
+          }
+        semaphore.wait()
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
         if (ssid == "OEBB") {
@@ -51,21 +63,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
 
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView()
 
-        // Create the window and set the content view.
-        window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
-            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
-            backing: .buffered, defer: false)
-        window.isReleasedWhenClosed = false
-        window.center()
-        window.setFrameAutosaveName("Main Window")
-        window.contentView = NSHostingView(rootView: contentView)
-        window.makeKeyAndOrderFront(nil)
-    }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
@@ -78,7 +76,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var result = "yo"
         loadTrainSpeed() { data in
                if let data = data {
-                result = data + " km/h " + self.ssid
+                result = data + " km/h (" + self.trainName + ")"
                 semaphore.signal()
 
                }
@@ -88,7 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
      }
     
     func loadTrainSpeed(completion: @escaping (String?) -> ()) {
-        if let url = URL(string: "https://localhost:5001") {
+        if let url = URL(string: "https://railnet.oebb.at/api/speed") {
             do {
                 let contents = try String(contentsOf: url)
                 completion(contents)
@@ -100,10 +98,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    func sendRequest(completion: @escaping (String?) -> ()) {
+    func loadTrainInfo(completion: @escaping (String?) -> ()) {
         //let params = ["username":"john", "password":"123456"] as Dictionary<String, String>
 
-        var request = URLRequest(url: URL(string: "https://railnet.oebb.at/api/speed")!)
+        var request = URLRequest(url: URL(string: "https://railnet.oebb.at/api/trainInfo")!)
         request.httpMethod = "GET"
         //request.httpBody = try? JSONSerialization.data(withJSONObject: params, options: [])
         //request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -113,7 +111,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if (response != nil) {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data!) as! [String: Any]
-                    return completion(json["name"] as! String)
+                    let trainType = json["trainType"] as! String
+                    let lineNumber = json["lineNumber"] as! String
+                    return completion(trainType + lineNumber)
                 } catch {
                     return completion(nil)
                 }
@@ -121,6 +121,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }).resume()
     }
 
+    
+    func loadTripInfo(completion: @escaping (String?) -> ()) {
+        if let url = URL(string: "https://railnet.oebb.at/api/speed") {
+            do {
+                let contents = try String(contentsOf: url)
+                do {
+                    let doc: Document = try SwiftSoup.parse(contents)
+                    let stations = try doc.getElementsByClass("station_item")
+                    for station in stations {
+                        print(try station.text())
+                    }
+                    print("yooosoas")
+                } catch Exception.Error(let type, let message) {
+                    print(message)
+                } catch {
+                    print("error")
+                }
+                completion(contents)
+            } catch {
+                completion(nil)
+            }
+        } else {
+            completion(nil)
+        }
+    }
+    
+    /* Alles umstellen auf https://railnet.oebb.at/assets/modules/fis/combined.json?_time=1627830415168*/
 
 }
 
